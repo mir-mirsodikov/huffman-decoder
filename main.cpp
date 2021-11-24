@@ -1,19 +1,21 @@
 /**
  * Mirmukhammad Mirsodikov
+ * CS400
  * Homework 8
     - From your code for hw 7, output Huffman coding scheme to a file (huff.sch).
     - Open the scheme file, load coding scheme into a certain data structure.
     - Open the encoded file, use coding scheme to decode the encoded file.
     - Output plain text (after decoding) to pride_decoded.txt. 
+ * November 23, 2021
  */
 
 #include <iostream>
 #include <string>
 #include <fstream>
-#include <locale>
 #include <map>
 using namespace std;
 
+// Get the huffman encoding scheme from the specified text file
 map<string, string> getEncodingScheme(const string fileName) {
   map<string, string> encodingScheme;
   ifstream fileRead;
@@ -33,6 +35,7 @@ map<string, string> getEncodingScheme(const string fileName) {
   return encodingScheme;
 }
 
+// Decode the encodedFile using the encodingScheme and write it into a new text file
 void decodeFile(const string encodedFile, map<string, string> encodingScheme) {
   ifstream fileRead;
   ofstream fileWrite;
