@@ -14,27 +14,54 @@
 #include <map>
 using namespace std;
 
-map<string, wchar_t> getEncodingScheme(const string fileName) {
-  map<string, wchar_t> encodingScheme;
+map<string, string> getEncodingScheme(const string fileName) {
+  map<string, string> encodingScheme;
   ifstream fileRead;
 
   fileRead.open(fileName);
   if (fileRead.is_open()) {
-    wchar_t fileCharacer;
-    string line;
+    string prefix;
+    string character;
     while (!fileRead.eof()) {
-      getline(fileRead, line);
-      cout << line << endl;
+      getline(fileRead, prefix);
+      getline(fileRead, character);
+      encodingScheme[prefix] = character;
     }
-
     fileRead.close();
   }
 
   return encodingScheme;
 }
 
+void decodeFile(const string encodedFile, map<string, string> encodingScheme) {
+  ifstream fileRead;
+  ofstream fileWrite;
+
+  fileRead.open(encodedFile);
+  if (fileRead.is_open()) {
+    char fileCharacter;
+    string character;
+    fileWrite.open("pride_decoded.txt");
+    while (!fileRead.eof()) {
+      fileRead.get(fileCharacter);
+      character += fileCharacter;
+      if (encodingScheme.count(character) != 0) {
+        if (encodingScheme[character] == "") {
+          fileWrite << endl;
+        }
+        else {
+          fileWrite << encodingScheme[character];
+        }
+        character = "";
+      }
+    }
+  }
+}
+
 int main() {
   const string huffSchemeFile = "huff.sch";
   const string huffEncodedFile = "pride.huff";
-  map<string, wchar_t> encodingScheme = getEncodingScheme(huffSchemeFile);
+  map<string, string> encodingScheme = getEncodingScheme(huffSchemeFile);
+
+  decodeFile(huffEncodedFile, encodingScheme);
 }
